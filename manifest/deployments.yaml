@@ -1,0 +1,228 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maven-customer-service 
+spec:
+  selector:
+    matchLabels:
+      app: maven-customer-service 
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: maven-customer-service 
+    spec:
+      containers:
+        - name: maven-customer-service 
+          image: bahachalbia/maven-customer-service:latest
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maven-order-service 
+spec:
+  selector:
+    matchLabels:
+      app: maven-order-service 
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: maven-order-service 
+    spec:
+      containers:
+        - name: maven-order-service 
+          image: bahachalbia/maven-order-service:latest
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maven-oauth2-server 
+spec:
+  selector:
+    matchLabels:
+      app: maven-oauth2-server 
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: maven-oauth2-server 
+    spec:
+      containers:
+        - name: maven-oauth2-server 
+          image: bahachalbia/maven-oauth2-server:latest
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maven-admin
+spec:
+  selector:
+    matchLabels:
+      app: maven-admin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: maven-admin
+    spec:
+      containers:
+        - name: maven-admin
+          image: bahachalbia/maven-admin:latest
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maven-oauth2-server 
+spec:
+  selector:
+    matchLabels:
+      app: maven-oauth2-server 
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: maven-oauth2-server 
+    spec:
+      containers:
+        - name: maven-oauth2-server 
+          image: bahachalbia/maven-oauth2-server:latest
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maven-config-server
+spec:
+  selector:
+    matchLabels:
+      app: maven-config-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: maven-config-server
+    spec:
+      containers:
+        - name: maven-config-server
+          image: bahachalbia/maven-config-server:latest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maven-zuul-server 
+spec:
+  selector:
+    matchLabels:
+      app: maven-zuul-server 
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: maven-zuul-server 
+    spec:
+      containers:
+        - name: maven-zuul-server 
+          image: bahachalbia/maven-zuul-server:latest
+          
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: maven-eureka-server
+spec:
+  selector:
+    matchLabels:
+      app: maven-eureka-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: maven-eureka-server
+    spec:
+      containers:
+        - name: maven-eureka-server
+          image: bahachalbia/maven-eureka-server:latest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wurstmeister-kafka
+spec:
+  selector:
+    matchLabels:
+      app: wurstmeister-kafka
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wurstmeister-kafka
+    spec:
+      containers:
+        - name: wurstmeister-kafka
+          image: wurstmeister/kafka:latest
+          env:
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: wurstmeister-zookeeper.default.svc.cluster.local:2181
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wurstmeister-zookeeper 
+spec:
+  selector:
+    matchLabels:
+      app: wurstmeister-zookeeper 
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: wurstmeister-zookeeper 
+    spec:
+      containers:
+        - name: wurstmeister-zookeeper 
+          image: wurstmeister/zookeeper:latest
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql/mysql-server:5.7
+        env:
+        - name: MYSQL_DATABASE
+          value: e_commerce
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        - name: MYSQL_ROOT_HOST
+          value: '%'
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: sql-init
+          mountPath: /docker-entrypoint-initdb.d
+  volumeClaimTemplates:
+  - metadata:
+      name: sql-init
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

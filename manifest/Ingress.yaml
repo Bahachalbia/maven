@@ -1,0 +1,26 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: exemple-ingress
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: "issuer-letsencrypt"
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts:
+      - zuul.watchzabbix.tk
+    secretName: zuul-watchzabbix-secret
+  rules:
+    - host: zuul.watchzabbix.tk
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: maven-admin
+                port:
+                  number: 8080
