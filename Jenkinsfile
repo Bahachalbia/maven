@@ -18,13 +18,13 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t bahachalbia/maven-customer-service:latest maven/customer-service/'
-                sh 'docker build -t bahachalbia/maven-order-service:latest maven/order-service/'
-                sh 'docker build -t bahachalbia/maven-oauth2-server:latest maven/oauth2-server/'
-                sh 'docker build -t bahachalbia/maven-admin:latest maven/admin-server/'
-                sh 'docker build -t bahachalbia/maven-config-server:latest maven/config-server/'
-                sh 'docker build -t bahachalbia/maven-zuul-server:latest maven/zuul-server/'
-                sh 'docker build -t bahachalbia/maven-eureka-server:latest maven/eureka-server/'
+                sh 'docker build -t bahachalbia/maven-customer-service:latest customer-service/'
+                sh 'docker build -t bahachalbia/maven-order-service:latest order-service/'
+                sh 'docker build -t bahachalbia/maven-oauth2-server:latest oauth2-server/'
+                sh 'docker build -t bahachalbia/maven-admin:latest admin-server/'
+                sh 'docker build -t bahachalbia/maven-config-server:latest config-server/'
+                sh 'docker build -t bahachalbia/maven-zuul-server:latest zuul-server/'
+                sh 'docker build -t bahachalbia/maven-eureka-server:latest eureka-server/'
                  }
         }
           stage('login') {
