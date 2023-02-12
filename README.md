@@ -65,3 +65,4 @@ The application consists of 6 different services
  
     ![screenshot!](images/del_customer.png)
  
+# maven
